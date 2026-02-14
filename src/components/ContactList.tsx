@@ -18,18 +18,27 @@ const ContactList = ({ selectedId, onSelect, collapsed = false }: ContactListPro
 
   if (collapsed) {
     return (
-      <div className="w-16 bg-card border-r border-border flex flex-col items-center py-4 gap-3">
+      <div className="w-16 bg-card border-r border-border flex flex-col items-center pt-4 gap-2">
         {contacts.map((c) => (
           <button
             key={c.id}
             onClick={() => onSelect(c)}
-            className={`w-10 h-10 rounded-full flex items-center justify-center text-xs font-semibold transition-all ${
+            className={`w-10 h-10 rounded-full shrink-0 overflow-hidden transition-all ${
               selectedId === c.id
-                ? "gradient-primary text-primary-foreground ring-2 ring-primary/30"
-                : "bg-muted text-muted-foreground hover:bg-primary/10"
+                ? "ring-2 ring-primary ring-offset-1"
+                : "hover:ring-2 hover:ring-muted-foreground/30"
             }`}
           >
-            {c.initials}
+            <img
+              src={c.avatar}
+              alt={c.name}
+              className="w-full h-full object-cover"
+              onError={(e) => {
+                (e.target as HTMLImageElement).style.display = 'none';
+                (e.target as HTMLImageElement).parentElement!.classList.add('flex', 'items-center', 'justify-center', 'bg-muted', 'text-muted-foreground', 'text-xs', 'font-semibold');
+                (e.target as HTMLImageElement).parentElement!.textContent = c.initials;
+              }}
+            />
           </button>
         ))}
       </div>
@@ -77,16 +86,12 @@ const ContactList = ({ selectedId, onSelect, collapsed = false }: ContactListPro
             }`}
           >
             {/* Avatar */}
-            <div className={`w-12 h-12 rounded-full flex items-center justify-center text-sm font-semibold shrink-0 overflow-hidden ${
+            <div className={`w-12 h-12 rounded-full shrink-0 overflow-hidden ${
               selectedId === c.id
-                ? "gradient-primary text-primary-foreground"
-                : "bg-muted text-muted-foreground"
+                ? "ring-2 ring-primary ring-offset-1"
+                : ""
             }`}>
-              {c.avatar && c.avatar.startsWith("http") ? (
-                <img src={c.avatar} alt={c.name} className="w-full h-full object-cover" />
-              ) : (
-                c.initials
-              )}
+              <img src={c.avatar} alt={c.name} className="w-full h-full object-cover" />
             </div>
 
             {/* Info */}
