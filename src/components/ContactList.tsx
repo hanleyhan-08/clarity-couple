@@ -38,8 +38,8 @@ const ContactList = ({ selectedId, onSelect, collapsed = false }: ContactListPro
 
   return (
     <div className="w-full md:w-[340px] bg-card border-r border-border flex flex-col">
-      {/* WhatsApp-style header */}
-      <div className="gradient-primary px-4 py-3 flex items-center justify-between">
+      {/* WhatsApp-style header - fixed height to align with chat header */}
+      <div className="gradient-primary px-4 h-[52px] flex items-center justify-between shrink-0">
         <h2 className="text-base font-semibold text-primary-foreground">Chats</h2>
         <div className="flex items-center gap-3 text-primary-foreground/80">
           <Search className="w-5 h-5 cursor-pointer hover:text-primary-foreground transition-colors" />
@@ -77,12 +77,16 @@ const ContactList = ({ selectedId, onSelect, collapsed = false }: ContactListPro
             }`}
           >
             {/* Avatar */}
-            <div className={`w-12 h-12 rounded-full flex items-center justify-center text-sm font-semibold shrink-0 ${
+            <div className={`w-12 h-12 rounded-full flex items-center justify-center text-sm font-semibold shrink-0 overflow-hidden ${
               selectedId === c.id
                 ? "gradient-primary text-primary-foreground"
                 : "bg-muted text-muted-foreground"
             }`}>
-              {c.initials}
+              {c.avatar && c.avatar.startsWith("http") ? (
+                <img src={c.avatar} alt={c.name} className="w-full h-full object-cover" />
+              ) : (
+                c.initials
+              )}
             </div>
 
             {/* Info */}

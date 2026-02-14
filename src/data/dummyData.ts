@@ -81,8 +81,8 @@ export interface AnalysisResult {
 
 export const contacts: Contact[] = [
   {
-    id: "1", name: "Sarah Putri", initials: "SP", phone: "+62 812-3456-7890",
-    avatar: "SP", lastMessage: "Aku ngerti kok maksud kamu...", time: "14:32",
+    id: "1", name: "Brigida Putri", initials: "BP", phone: "+62 812-3456-7890",
+    avatar: "https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=100&h=100&fit=crop&crop=face", lastMessage: "Aku ngerti kok maksud kamu...", time: "14:32",
     unread: 3, isOnline: true, lastSeen: null, relationship: "Pacar (2 tahun)", status: "online",
   },
   {
@@ -116,7 +116,7 @@ export const chatMessages: Record<string, ChatMessage[]> = {
     { id: "5", fromMe: false, sender: "partner", text: "Tapi weekend kemarin kita janjian kamu malah bilang capek", time: "14:26", read: true },
     { id: "6", fromMe: true, sender: "user", text: "Iya emang lagi capek banget", time: "14:27", read: true },
     { id: "7", fromMe: false, sender: "partner", text: "Capek atau emang udah gak mau effort buat hubungan ini?", time: "14:28", read: true },
-    { id: "8", fromMe: true, sender: "user", text: "Sarah please jangan gini dulu", time: "14:29", read: true },
+    { id: "8", fromMe: true, sender: "user", text: "Brigida please jangan gini dulu", time: "14:29", read: true },
     { id: "9", fromMe: false, sender: "partner", text: "Gini gimana? Aku cuma nanya", time: "14:30", read: true },
     { id: "10", fromMe: true, sender: "user", text: "Aku udah bilang lagi banyak kerjaan", time: "14:31", read: true },
     { id: "11", fromMe: false, sender: "partner", text: "Aku ngerti kok maksud kamu...", time: "14:32", read: false },
@@ -187,20 +187,20 @@ export const dummyAnalysis: Record<string, FullAnalysis> = {
     quickReply: {
       calm: {
         text: "Sayang, aku paham kamu merasa diabaikan. Minggu ini memang lagi overwhelm, tapi bukan berarti aku gak peduli sama kita. Gimana kalau weekend depan kita quality time bareng? Aku janji bakal fokus full sama kamu.",
-        reason: "Mengakui perasaan Sarah tanpa defensif, plus kasih solusi konkret"
+        reason: "Mengakui perasaan Brigida tanpa defensif, plus kasih solusi konkret"
       },
       firm: {
-        text: "Sarah, aku ngerti kamu kecewa. Tapi aku butuh kamu percaya kalau aku lagi beneran struggle. Bukan aku gak mau effort, tapi aku lagi gak bisa 100%. Bisa gak kita supportan dulu sampai deadline ini kelar?",
+        text: "Brigida, aku ngerti kamu kecewa. Tapi aku butuh kamu percaya kalau aku lagi beneran struggle. Bukan aku gak mau effort, tapi aku lagi gak bisa 100%. Bisa gak kita supportan dulu sampai deadline ini kelar?",
         reason: "Tegas tapi tetap vulnerable, minta dukungan dengan jujur"
       },
       empathetic: {
         text: "Aku minta maaf kalau kamu ngerasa aku distant. Pasti kamu lonely ya minggu ini? Aku janji setelah deadline besok, kita video call lama dan aku dengerin semua cerita kamu. I love you.",
-        reason: "Fokus ke perasaan Sarah, validasi emosi, plus komitmen jelas"
+        reason: "Fokus ke perasaan Brigida, validasi emosi, plus komitmen jelas"
       }
     },
     conflictAnalysis: {
       score: 68, level: "medium",
-      summary: "Terjadi ketegangan karena ekspektasi waktu berkualitas yang tidak terpenuhi. Sarah merasa diabaikan, sementara partner merasa tertekan dengan pekerjaan. Komunikasi menjadi defensif di kedua sisi.",
+      summary: "Terjadi ketegangan karena ekspektasi waktu berkualitas yang tidak terpenuhi. Brigida merasa diabaikan, sementara partner merasa tertekan dengan pekerjaan. Komunikasi menjadi defensif di kedua sisi.",
       perspectives: {
         you: { feels: ["Tertekan dengan deadline", "Merasa tidak dimengerti", "Butuh space"], means: "Bukan tidak peduli, tapi sedang overwhelmed dan butuh fokus sementara" },
         partner: { feels: ["Diabaikan", "Tidak diprioritaskan", "Khawatir hubungan melemah"], means: "Bukan mau menyerang, tapi butuh reassurance dan quality time" },
@@ -214,7 +214,7 @@ export const dummyAnalysis: Record<string, FullAnalysis> = {
       mainPattern: "Conflict Avoidance yang berujung Passive Escalation",
       frequency: "Pola serupa terjadi 3x dalam 2 bulan terakhir",
       triggers: ["Periode kerja intensif", "Weekend plans yang gagal", "Komunikasi yang berkurang"],
-      cycle: "1. Partner sibuk → 2. Sarah merasa neglected → 3. Sarah questioning → 4. Partner defensif → 5. Konflik meningkat",
+      cycle: "1. Partner sibuk → 2. Brigida merasa neglected → 3. Brigida questioning → 4. Partner defensif → 5. Konflik meningkat",
       recommendation: "Set ekspektasi jelas di awal periode sibuk + scheduled quality time meski singkat"
     }
   },

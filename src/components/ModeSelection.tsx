@@ -24,7 +24,7 @@ const ModeSelection = ({ onAnalyze, contactSelected }: ModeSelectionProps) => {
 
   if (loading) {
     return (
-      <div className="flex-1 flex items-center justify-center p-8">
+      <div className="w-full md:w-80 bg-card border-l border-border flex items-center justify-center p-8">
         <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="text-center">
           <Loader2 className="w-10 h-10 text-primary animate-spin mx-auto mb-4" />
           <p className="text-foreground font-medium">Menganalisis percakapan...</p>
