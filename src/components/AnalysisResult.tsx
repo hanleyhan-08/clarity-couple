@@ -7,6 +7,7 @@ interface AnalysisResultProps {
   contact: Contact;
   onBack: () => void;
   mode: string;
+  data?: any;
 }
 
 const ScoreBar = ({ value, color }: { value: number; color: string }) => (
@@ -35,8 +36,9 @@ const CopyButton = ({ text }: { text: string }) => {
   );
 };
 
-const AnalysisResult = ({ contact, onBack, mode }: AnalysisResultProps) => {
-  const analysis = dummyAnalysis[contact.id];
+const AnalysisResult = ({ contact, onBack, mode, data }: AnalysisResultProps) => {
+  // Use data from API if available, otherwise fallback to dummy (for demo purposes)
+  const analysis = data || dummyAnalysis[contact.id];
 
   if (!analysis) {
     return (

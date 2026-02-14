@@ -1,12 +1,13 @@
-import { useState, useCallback } from "react";
+import { useState, useCallback, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { ResizablePanelGroup, ResizablePanel, ResizableHandle } from "@/components/ui/resizable";
 import ContactList from "@/components/ContactList";
-import ChatPreview from "@/components/ChatPreview";
+import ChatWithContact from "@/pages/ChatWithContact";
 import ModeSelection from "@/components/ModeSelection";
 import AnalysisResult from "@/components/AnalysisResult";
-import { type Contact } from "@/data/dummyData";
+import { type Contact, contacts } from "@/data/dummyData";
 import { ArrowLeft } from "lucide-react";
+import { useParams, useNavigate } from "react-router-dom";
 
 interface AppMainProps {
   onBack: () => void;
@@ -15,18 +16,41 @@ interface AppMainProps {
 type View = "select" | "result";
 
 const AppMain = ({ onBack }: AppMainProps) => {
+  const { contactId } = useParams();
+  const navigate = useNavigate();
   const [selectedContact, setSelectedContact] = useState<Contact | null>(null);
   const [view, setView] = useState<View>("select");
   const [analysisMode, setAnalysisMode] = useState<string>("conflict");
 
+  // Sync URL param with state
+  useEffect(() => {
+    if (contactId) {
+      const found = contacts.find(c => c.id === contactId);
+      if (found) {
+        setSelectedContact(found);
+      }
+    } else {
+      setSelectedContact(null);
+    }
+  }, [contactId]);
 
-  const handleAnalyze = useCallback((mode: string) => {
+  const handleContactSelect = (contact: Contact) => {
+    setSelectedContact(contact);
+    setView("select");
+    navigate(`/chat/${contact.id}`);
+  };
+
+  const [analysisData, setAnalysisData] = useState<any>(null);
+
+  const handleAnalyze = useCallback((mode: string, data: any) => {
     setAnalysisMode(mode);
+    setAnalysisData(data);
     setView("result");
   }, []);
 
   const handleBackToMode = useCallback(() => {
     setView("select");
+    setAnalysisData(null);
   }, []);
 
   return (
@@ -46,7 +70,7 @@ const AppMain = ({ onBack }: AppMainProps) => {
         <div className="overflow-hidden shrink-0 h-full bg-card">
           <ContactList
             selectedId={selectedContact?.id ?? null}
-            onSelect={(c) => { setSelectedContact(c); setView("select"); }}
+            onSelect={handleContactSelect}
             collapsed={false}
           />
         </div>
@@ -55,7 +79,7 @@ const AppMain = ({ onBack }: AppMainProps) => {
         <ResizablePanelGroup direction="horizontal" className="flex-1">
           <ResizablePanel defaultSize={75} minSize={30}>
             <div className="h-full flex flex-col overflow-hidden">
-              <ChatPreview contact={selectedContact} />
+              <ChatWithContact contact={selectedContact} />
             </div>
           </ResizablePanel>
           <ResizableHandle withHandle />
@@ -70,7 +94,11 @@ const AppMain = ({ onBack }: AppMainProps) => {
                     exit={{ opacity: 0, x: -20 }}
                     className="h-full"
                   >
-                    <ModeSelection onAnalyze={handleAnalyze} contactSelected={!!selectedContact} />
+                    <ModeSelection
+                      onAnalyze={handleAnalyze}
+                      contactSelected={!!selectedContact}
+                      contact={selectedContact}
+                    />
                   </motion.div>
                 ) : (
                   <motion.div
@@ -81,7 +109,12 @@ const AppMain = ({ onBack }: AppMainProps) => {
                     className="h-full"
                   >
                     {selectedContact && (
-                      <AnalysisResult contact={selectedContact} onBack={handleBackToMode} mode={analysisMode} />
+                      <AnalysisResult
+                        contact={selectedContact}
+                        onBack={handleBackToMode}
+                        mode={analysisMode}
+                        data={analysisData}
+                      />
                     )}
                   </motion.div>
                 )}

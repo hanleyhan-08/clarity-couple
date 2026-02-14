@@ -3,28 +3,60 @@ import { motion } from "framer-motion";
 import { analysisMode, sampleQuestions } from "@/data/dummyData";
 import { ArrowRight, Loader2 } from "lucide-react";
 
+import { useUUID } from "@/context/UUIDProvider";
+import { type Contact } from "@/data/dummyData";
+import { config } from "@/config";
+
 interface ModeSelectionProps {
-  onAnalyze: (mode: string) => void;
+  onAnalyze: (mode: string, data: any) => void;
   contactSelected: boolean;
+  contact?: Contact | null;
 }
 
-const ModeSelection = ({ onAnalyze, contactSelected }: ModeSelectionProps) => {
+const ModeSelection = ({ onAnalyze, contactSelected, contact }: ModeSelectionProps) => {
   const [selectedMode, setSelectedMode] = useState<string | null>(null);
   const [question, setQuestion] = useState("");
   const [loading, setLoading] = useState(false);
 
-  const handleAnalyze = () => {
-    if (!selectedMode) return;
+  const { userUUID } = useUUID();
+
+  const handleAnalyze = async () => {
+    if (!selectedMode || !contact || !userUUID) return;
+
     setLoading(true);
-    setTimeout(() => {
+    try {
+      let endpoint = `${config.apiBaseUrl} /analysis/${selectedMode} `;
+      let body: any = {
+        user_uuid: userUUID,
+        contact_id: contact.id
+      };
+
+      if (selectedMode === "question") {
+        body.question = question;
+      }
+
+      const res = await fetch(endpoint, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(body)
+      });
+
+      if (!res.ok) throw new Error("Analysis failed");
+
+      const data = await res.json();
+      onAnalyze(selectedMode, data);
+    } catch (e) {
+      console.error("Analysis failed", e);
+      // Optional: show error toast
+      alert("Gagal melakukan analisis. Pastikan backend berjalan.");
+    } finally {
       setLoading(false);
-      onAnalyze(selectedMode);
-    }, 2000);
+    }
   };
 
   if (loading) {
     return (
-      <div className="w-full md:w-80 bg-card border-l border-border flex items-center justify-center p-8">
+      <div className="w-full h-full bg-card border-l border-border flex items-center justify-center p-8">
         <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="text-center">
           <Loader2 className="w-10 h-10 text-primary animate-spin mx-auto mb-4" />
           <p className="text-foreground font-medium">Menganalisis percakapan...</p>
@@ -43,7 +75,7 @@ const ModeSelection = ({ onAnalyze, contactSelected }: ModeSelectionProps) => {
   }
 
   return (
-    <div className="w-full md:w-80 bg-card border-l border-border p-4 overflow-y-auto">
+    <div className="w-full h-full bg-card border-l border-border p-4 overflow-y-auto">
       <h3 className="text-sm font-semibold text-foreground mb-4">Pilih Mode Analisis</h3>
 
       <div className="space-y-3 mb-6">
@@ -53,11 +85,10 @@ const ModeSelection = ({ onAnalyze, contactSelected }: ModeSelectionProps) => {
             whileHover={{ scale: 1.01 }}
             whileTap={{ scale: 0.99 }}
             onClick={() => setSelectedMode(mode.id)}
-            className={`w-full text-left p-4 rounded-xl border transition-all relative overflow-hidden ${
-              selectedMode === mode.id
-                ? "border-primary bg-primary/5 shadow-md"
-                : "border-border hover:border-primary/30 hover:bg-muted/50"
-            }`}
+            className={`w-full text-left p-4 rounded-xl border transition-all relative overflow-hidden ${selectedMode === mode.id
+              ? "border-primary bg-primary/5 shadow-md"
+              : "border-border hover:border-primary/30 hover:bg-muted/50"
+              }`}
           >
             {"badge" in mode && mode.badge && (
               <span className="absolute top-2 right-2 text-[9px] font-bold bg-destructive text-destructive-foreground rounded-full px-2 py-0.5">
@@ -100,11 +131,10 @@ const ModeSelection = ({ onAnalyze, contactSelected }: ModeSelectionProps) => {
       <button
         onClick={handleAnalyze}
         disabled={!contactSelected || !selectedMode}
-        className={`w-full py-3 rounded-xl text-sm font-semibold flex items-center justify-center gap-2 transition-all ${
-          contactSelected && selectedMode
-            ? "gradient-primary text-primary-foreground hover:opacity-90 shadow-lg"
-            : "bg-muted text-muted-foreground cursor-not-allowed"
-        }`}
+        className={`w-full py-3 rounded-xl text-sm font-semibold flex items-center justify-center gap-2 transition-all ${contactSelected && selectedMode
+          ? "gradient-primary text-primary-foreground hover:opacity-90 shadow-lg"
+          : "bg-muted text-muted-foreground cursor-not-allowed"
+          }`}
       >
         {selectedMode === "quick-reply" ? "Dapatkan Balasan" : selectedMode === "question" ? "Analisis" : "Mulai Analisis"}
         <ArrowRight className="w-4 h-4" />
