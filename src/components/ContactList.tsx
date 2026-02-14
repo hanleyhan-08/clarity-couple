@@ -1,5 +1,5 @@
 import { motion } from "framer-motion";
-import { Search } from "lucide-react";
+import { Search, MoreVertical } from "lucide-react";
 import { contacts, type Contact } from "@/data/dummyData";
 import { useState } from "react";
 
@@ -23,13 +23,13 @@ const ContactList = ({ selectedId, onSelect, collapsed = false }: ContactListPro
           <button
             key={c.id}
             onClick={() => onSelect(c)}
-            className={`w-10 h-10 rounded-full flex items-center justify-center text-sm font-semibold transition-all ${
+            className={`w-10 h-10 rounded-full flex items-center justify-center text-xs font-semibold transition-all ${
               selectedId === c.id
                 ? "gradient-primary text-primary-foreground ring-2 ring-primary/30"
-                : "bg-muted text-muted-foreground hover:bg-accent"
+                : "bg-muted text-muted-foreground hover:bg-primary/10"
             }`}
           >
-            {c.avatar}
+            {c.initials}
           </button>
         ))}
       </div>
@@ -37,55 +37,72 @@ const ContactList = ({ selectedId, onSelect, collapsed = false }: ContactListPro
   }
 
   return (
-    <div className="w-full md:w-72 bg-card border-r border-border flex flex-col">
-      <div className="p-4 border-b border-border">
-        <h2 className="text-sm font-semibold text-foreground mb-3">Pilih Kontak Pasangan</h2>
+    <div className="w-full md:w-[340px] bg-card border-r border-border flex flex-col">
+      {/* WhatsApp-style header */}
+      <div className="gradient-primary px-4 py-3 flex items-center justify-between">
+        <h2 className="text-base font-semibold text-primary-foreground">Chats</h2>
+        <div className="flex items-center gap-3 text-primary-foreground/80">
+          <Search className="w-5 h-5 cursor-pointer hover:text-primary-foreground transition-colors" />
+          <MoreVertical className="w-5 h-5 cursor-pointer hover:text-primary-foreground transition-colors" />
+        </div>
+      </div>
+
+      {/* Search */}
+      <div className="px-3 py-2 bg-card">
         <div className="relative">
           <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" />
           <input
             type="text"
-            placeholder="Cari kontak..."
+            placeholder="Cari atau mulai chat baru"
             value={search}
             onChange={(e) => setSearch(e.target.value)}
-            className="w-full bg-muted rounded-lg pl-9 pr-3 py-2 text-sm text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-primary/30 border border-border"
+            className="w-full bg-muted rounded-lg pl-9 pr-3 py-2 text-sm text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-1 focus:ring-primary/30"
           />
         </div>
       </div>
+
+      {/* Contact List */}
       <div className="flex-1 overflow-y-auto">
         {filtered.map((c, i) => (
           <motion.button
             key={c.id}
             initial={{ opacity: 0, x: -10 }}
             animate={{ opacity: 1, x: 0 }}
-            transition={{ delay: i * 0.05 }}
+            transition={{ delay: i * 0.04 }}
             onClick={() => onSelect(c)}
-            className={`w-full flex items-center gap-3 px-4 py-3 text-left transition-all border-l-2 ${
+            className={`w-full flex items-center gap-3 px-4 py-3 text-left transition-all border-b border-border/50 ${
               selectedId === c.id
-                ? "bg-primary/5 border-l-primary"
-                : "border-l-transparent hover:bg-muted"
+                ? "bg-primary/5"
+                : "hover:bg-muted/50"
             }`}
           >
-            <div
-              className={`w-10 h-10 rounded-full flex items-center justify-center text-sm font-semibold shrink-0 ${
-                selectedId === c.id
-                  ? "gradient-primary text-primary-foreground"
-                  : "bg-muted text-foreground"
-              }`}
-            >
-              {c.avatar}
+            {/* Avatar */}
+            <div className={`w-12 h-12 rounded-full flex items-center justify-center text-sm font-semibold shrink-0 ${
+              selectedId === c.id
+                ? "gradient-primary text-primary-foreground"
+                : "bg-muted text-muted-foreground"
+            }`}>
+              {c.initials}
             </div>
+
+            {/* Info */}
             <div className="flex-1 min-w-0">
-              <p className="text-sm font-medium text-foreground truncate">{c.name}</p>
-              <p className="text-xs text-muted-foreground">
-                {c.status === "online" ? (
-                  <span className="flex items-center gap-1">
-                    <span className="w-1.5 h-1.5 rounded-full bg-success" />
-                    Online
+              <div className="flex items-center justify-between">
+                <p className="text-sm font-medium text-foreground truncate">{c.name}</p>
+                <span className={`text-[11px] ${c.unread > 0 ? "text-primary font-medium" : "text-muted-foreground"}`}>
+                  {c.time}
+                </span>
+              </div>
+              <div className="flex items-center justify-between mt-0.5">
+                <p className="text-xs text-muted-foreground truncate pr-2">
+                  {c.lastMessage}
+                </p>
+                {c.unread > 0 && (
+                  <span className="w-5 h-5 rounded-full gradient-primary text-primary-foreground text-[10px] font-bold flex items-center justify-center shrink-0">
+                    {c.unread}
                   </span>
-                ) : (
-                  `Last seen ${c.lastSeen}`
                 )}
-              </p>
+              </div>
             </div>
           </motion.button>
         ))}
