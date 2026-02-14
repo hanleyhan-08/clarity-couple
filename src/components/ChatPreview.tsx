@@ -3,6 +3,7 @@ import { chatMessages, type Contact } from "@/data/dummyData";
 import { Search, MoreVertical, Smile, Paperclip, Mic } from "lucide-react";
 import { format, isToday, isYesterday } from "date-fns";
 import { id as idLocale } from "date-fns/locale";
+import { useLayoutEffect, useRef } from "react";
 
 interface ChatPreviewProps {
   contact: Contact | null;
@@ -24,6 +25,13 @@ const ChatPreview = ({ contact }: ChatPreviewProps) => {
   }
 
   const messages = chatMessages[contact.id] || [];
+  const scrollContainerRef = useRef<HTMLDivElement>(null);
+
+  useLayoutEffect(() => {
+    if (scrollContainerRef.current) {
+      scrollContainerRef.current.scrollTop = scrollContainerRef.current.scrollHeight;
+    }
+  }, [messages, contact]);
 
   const getDateLabel = (dateStr?: string) => {
     if (!dateStr) return null;
@@ -40,7 +48,7 @@ const ChatPreview = ({ contact }: ChatPreviewProps) => {
       {/* WhatsApp-style chat header */}
       <div className="gradient-primary px-4 h-[52px] flex items-center gap-3 shrink-0">
         <div className="w-9 h-9 rounded-full bg-primary-foreground/20 flex items-center justify-center text-xs font-semibold text-primary-foreground overflow-hidden">
-          {contact.avatar && contact.avatar.startsWith("http") ? (
+          {contact.avatar ? (
             <img src={contact.avatar} alt={contact.name} className="w-full h-full object-cover" />
           ) : (
             contact.initials
@@ -59,7 +67,10 @@ const ChatPreview = ({ contact }: ChatPreviewProps) => {
       </div>
 
       {/* Messages with WhatsApp wallpaper - scrollable */}
-      <div className="flex-1 overflow-y-auto wa-chat-bg px-4 py-3 min-h-0">
+      <div
+        ref={scrollContainerRef}
+        className="flex-1 overflow-y-auto wa-chat-bg px-4 py-3 min-h-0"
+      >
         <div className="space-y-1.5 pb-2">
           {messages.map((msg, i) => {
             const currentDate = msg.date;
@@ -83,8 +94,8 @@ const ChatPreview = ({ contact }: ChatPreviewProps) => {
                 >
                   <div
                     className={`max-w-[75%] rounded-lg px-3 py-1.5 shadow-sm relative ${msg.fromMe
-                        ? "bg-bubble-me rounded-tr-none"
-                        : "bg-bubble-partner rounded-tl-none"
+                      ? "bg-bubble-me rounded-tr-none"
+                      : "bg-bubble-partner rounded-tl-none"
                       }`}
                   >
                     <p className="text-[13px] text-foreground leading-relaxed">{msg.text}</p>
