@@ -19,6 +19,7 @@ const AppMain = ({ onBack }: AppMainProps) => {
   const [view, setView] = useState<View>("select");
   const [analysisMode, setAnalysisMode] = useState<string>("conflict");
   const [showContactList, setShowContactList] = useState(true);
+  const [sidebarExpanded, setSidebarExpanded] = useState(true);
 
   const handleAnalyze = useCallback((mode: string) => {
     setAnalysisMode(mode);
@@ -64,24 +65,37 @@ const AppMain = ({ onBack }: AppMainProps) => {
                     <ContactList
                       selectedId={selectedContact?.id ?? null}
                       onSelect={(c) => { setSelectedContact(c); setView("select"); }}
-                      collapsed
+                      collapsed={!sidebarExpanded}
                     />
                   </motion.div>
                 )}
               </AnimatePresence>
 
-              {/* Toggle button */}
-              <button
-                onClick={() => setShowContactList(!showContactList)}
-                className="w-6 bg-card border-r border-border flex items-center justify-center hover:bg-muted transition-colors shrink-0"
-                title={showContactList ? "Sembunyikan kontak" : "Tampilkan kontak"}
-              >
-                {showContactList ? (
-                  <PanelLeftClose className="w-3.5 h-3.5 text-muted-foreground" />
-                ) : (
-                  <PanelLeftOpen className="w-3.5 h-3.5 text-muted-foreground" />
+              {/* Toggle buttons */}
+              <div className="flex flex-col bg-card border-r border-border shrink-0">
+                <button
+                  onClick={() => setShowContactList(!showContactList)}
+                  className="w-6 flex-1 flex items-center justify-center hover:bg-muted transition-colors"
+                  title={showContactList ? "Sembunyikan kontak" : "Tampilkan kontak"}
+                >
+                  {showContactList ? (
+                    <PanelLeftClose className="w-3.5 h-3.5 text-muted-foreground" />
+                  ) : (
+                    <PanelLeftOpen className="w-3.5 h-3.5 text-muted-foreground" />
+                  )}
+                </button>
+                {showContactList && (
+                  <button
+                    onClick={() => setSidebarExpanded(!sidebarExpanded)}
+                    className="w-6 h-8 flex items-center justify-center hover:bg-muted transition-colors border-t border-border"
+                    title={sidebarExpanded ? "Kecilkan sidebar" : "Perbesar sidebar"}
+                  >
+                    <span className="text-[9px] text-muted-foreground font-medium">
+                      {sidebarExpanded ? "◀" : "▶"}
+                    </span>
+                  </button>
                 )}
-              </button>
+              </div>
 
               {/* Resizable chat + analysis */}
               <ResizablePanelGroup direction="horizontal" className="flex-1">

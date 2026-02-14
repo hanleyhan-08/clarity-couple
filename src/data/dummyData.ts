@@ -87,22 +87,22 @@ export const contacts: Contact[] = [
   },
   {
     id: "2", name: "Budi Santoso", initials: "BS", phone: "+62 813-9876-5432",
-    avatar: "BS", lastMessage: "Maaf ya kalau aku kelewatan", time: "Yesterday",
+    avatar: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=100&h=100&fit=crop&crop=face", lastMessage: "Maaf ya kalau aku kelewatan", time: "Yesterday",
     unread: 0, isOnline: false, lastSeen: "2 hours ago", relationship: "Pacar (6 bulan)", status: "offline",
   },
   {
     id: "3", name: "Rina Amelia", initials: "RA", phone: "+62 856-1234-8765",
-    avatar: "RA", lastMessage: "Iya deh terserah kamu", time: "2 days ago",
+    avatar: "https://images.unsplash.com/photo-1438761681033-6461ffad8d80?w=100&h=100&fit=crop&crop=face", lastMessage: "Iya deh terserah kamu", time: "2 days ago",
     unread: 0, isOnline: false, lastSeen: "yesterday", relationship: "Pacar LDR (1 tahun)", status: "offline",
   },
   {
     id: "4", name: "Dimas Prakoso", initials: "DP", phone: "+62 821-5555-9999",
-    avatar: "DP", lastMessage: "Kita perlu ngobrol serius", time: "Monday",
+    avatar: "https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=100&h=100&fit=crop&crop=face", lastMessage: "Kita perlu ngobrol serius", time: "Monday",
     unread: 1, isOnline: true, lastSeen: null, relationship: "Pacar (3 tahun)", status: "online",
   },
   {
     id: "5", name: "Ayu Lestari", initials: "AL", phone: "+62 878-4444-3333",
-    avatar: "AL", lastMessage: "Makasih udah dengerin aku 💚", time: "09:20",
+    avatar: "https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=100&h=100&fit=crop&crop=face", lastMessage: "Makasih udah dengerin aku 💚", time: "09:20",
     unread: 0, isOnline: false, lastSeen: "1 hour ago", relationship: "Pacar (8 bulan)", status: "offline",
   },
 ];
