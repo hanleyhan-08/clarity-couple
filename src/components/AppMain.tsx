@@ -100,7 +100,9 @@ const AppMain = ({ onBack }: AppMainProps) => {
               {/* Resizable chat + analysis */}
               <ResizablePanelGroup direction="horizontal" className="flex-1">
                 <ResizablePanel defaultSize={55} minSize={30}>
-                  <ChatPreview contact={selectedContact} />
+                  <div className="h-full flex flex-col overflow-hidden">
+                    <ChatPreview contact={selectedContact} />
+                  </div>
                 </ResizablePanel>
                 <ResizableHandle withHandle />
                 <ResizablePanel defaultSize={45} minSize={25} maxSize={65}>
