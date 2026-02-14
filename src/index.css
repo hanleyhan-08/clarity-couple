@@ -6,7 +6,7 @@
 
 @layer base {
   :root {
-    --background: 210 20% 98%;
+    --background: 30 19% 91%;
     --foreground: 220 20% 10%;
 
     --card: 0 0% 100%;
@@ -15,19 +15,21 @@
     --popover: 0 0% 100%;
     --popover-foreground: 220 20% 10%;
 
-    --primary: 239 84% 67%;
+    --primary: 152 69% 49%;
     --primary-foreground: 0 0% 100%;
+    --primary-dark: 168 75% 33%;
+    --primary-light: 105 68% 90%;
 
-    --secondary: 258 90% 66%;
+    --secondary: 174 82% 18%;
     --secondary-foreground: 0 0% 100%;
 
-    --muted: 220 14% 96%;
-    --muted-foreground: 220 9% 46%;
+    --muted: 210 12% 93%;
+    --muted-foreground: 200 12% 49%;
 
-    --accent: 330 81% 60%;
+    --accent: 199 89% 57%;
     --accent-foreground: 0 0% 100%;
 
-    --success: 160 84% 39%;
+    --success: 160 95% 39%;
     --success-foreground: 0 0% 100%;
 
     --warning: 38 92% 50%;
@@ -36,22 +38,25 @@
     --destructive: 0 84% 60%;
     --destructive-foreground: 0 0% 100%;
 
-    --border: 220 13% 91%;
-    --input: 220 13% 91%;
-    --ring: 239 84% 67%;
+    --border: 210 14% 83%;
+    --input: 210 14% 83%;
+    --ring: 152 69% 49%;
 
     --radius: 0.75rem;
 
-    --gradient-primary: linear-gradient(135deg, hsl(239, 84%, 67%), hsl(258, 90%, 66%));
-    --gradient-accent: linear-gradient(135deg, hsl(258, 90%, 66%), hsl(330, 81%, 60%));
-    --gradient-hero: linear-gradient(135deg, hsl(239, 84%, 60%), hsl(258, 90%, 58%), hsl(330, 81%, 55%));
-    --gradient-surface: linear-gradient(180deg, hsl(239, 84%, 67%, 0.05), hsl(258, 90%, 66%, 0.02));
+    --bubble-me: 105 68% 90%;
+    --bubble-partner: 0 0% 100%;
+
+    --gradient-primary: linear-gradient(135deg, hsl(168, 75%, 33%), hsl(152, 69%, 49%));
+    --gradient-accent: linear-gradient(135deg, hsl(152, 69%, 49%), hsl(199, 89%, 57%));
+    --gradient-hero: linear-gradient(135deg, hsl(168, 75%, 33%) 0%, hsl(152, 69%, 49%) 100%);
+    --gradient-surface: linear-gradient(180deg, hsl(152, 69%, 49%, 0.05), hsl(168, 75%, 33%, 0.02));
 
     --shadow-sm: 0 1px 2px hsl(220 20% 10% / 0.04);
     --shadow-md: 0 4px 12px hsl(220 20% 10% / 0.06);
-    --shadow-lg: 0 8px 30px hsl(239 84% 67% / 0.12);
+    --shadow-lg: 0 8px 30px hsl(152 69% 49% / 0.12);
     --shadow-card: 0 1px 3px hsl(220 20% 10% / 0.04), 0 1px 2px hsl(220 20% 10% / 0.06);
-    --shadow-card-hover: 0 10px 25px hsl(239 84% 67% / 0.1), 0 4px 10px hsl(220 20% 10% / 0.04);
+    --shadow-card-hover: 0 10px 25px hsl(152 69% 49% / 0.1), 0 4px 10px hsl(220 20% 10% / 0.04);
 
     --sidebar-background: 0 0% 98%;
     --sidebar-foreground: 240 5.3% 26.1%;
@@ -59,8 +64,8 @@
     --sidebar-primary-foreground: 0 0% 98%;
     --sidebar-accent: 240 4.8% 95.9%;
     --sidebar-accent-foreground: 240 5.9% 10%;
-    --sidebar-border: 220 13% 91%;
-    --sidebar-ring: 217.2 91.2% 59.8%;
+    --sidebar-border: 210 14% 83%;
+    --sidebar-ring: 152 69% 49%;
   }
 
   .dark {
@@ -70,19 +75,23 @@
     --card-foreground: 210 20% 95%;
     --popover: 224 25% 12%;
     --popover-foreground: 210 20% 95%;
-    --primary: 239 84% 67%;
+    --primary: 152 69% 49%;
     --primary-foreground: 0 0% 100%;
-    --secondary: 258 90% 66%;
+    --primary-dark: 168 75% 33%;
+    --primary-light: 105 68% 30%;
+    --secondary: 174 82% 18%;
     --secondary-foreground: 0 0% 100%;
     --muted: 224 20% 18%;
-    --muted-foreground: 220 9% 60%;
-    --accent: 330 81% 60%;
+    --muted-foreground: 200 12% 60%;
+    --accent: 199 89% 57%;
     --accent-foreground: 0 0% 100%;
     --destructive: 0 62.8% 30.6%;
     --destructive-foreground: 210 40% 98%;
     --border: 224 20% 18%;
     --input: 224 20% 18%;
-    --ring: 239 84% 67%;
+    --ring: 152 69% 49%;
+    --bubble-me: 152 40% 20%;
+    --bubble-partner: 224 25% 16%;
     --sidebar-background: 224 30% 8%;
     --sidebar-foreground: 240 4.8% 95.9%;
     --sidebar-primary: 224.3 76.3% 48%;
@@ -90,7 +99,7 @@
     --sidebar-accent: 240 3.7% 15.9%;
     --sidebar-accent-foreground: 240 4.8% 95.9%;
     --sidebar-border: 240 3.7% 15.9%;
-    --sidebar-ring: 217.2 91.2% 59.8%;
+    --sidebar-ring: 152 69% 49%;
   }
 }
 
@@ -135,5 +144,18 @@
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
     background-clip: text;
+  }
+
+  .bg-bubble-me {
+    background-color: hsl(var(--bubble-me));
+  }
+
+  .bg-bubble-partner {
+    background-color: hsl(var(--bubble-partner));
+  }
+
+  .wa-chat-bg {
+    background-color: hsl(var(--background));
+    background-image: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23000000' fill-opacity='0.03'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
   }
 }

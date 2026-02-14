@@ -4,7 +4,7 @@ import { analysisMode, sampleQuestions } from "@/data/dummyData";
 import { ArrowRight, Loader2 } from "lucide-react";
 
 interface ModeSelectionProps {
-  onAnalyze: () => void;
+  onAnalyze: (mode: string) => void;
   contactSelected: boolean;
 }
 
@@ -14,21 +14,18 @@ const ModeSelection = ({ onAnalyze, contactSelected }: ModeSelectionProps) => {
   const [loading, setLoading] = useState(false);
 
   const handleAnalyze = () => {
+    if (!selectedMode) return;
     setLoading(true);
     setTimeout(() => {
       setLoading(false);
-      onAnalyze();
+      onAnalyze(selectedMode);
     }, 2000);
   };
 
   if (loading) {
     return (
       <div className="flex-1 flex items-center justify-center p-8">
-        <motion.div
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          className="text-center"
-        >
+        <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="text-center">
           <Loader2 className="w-10 h-10 text-primary animate-spin mx-auto mb-4" />
           <p className="text-foreground font-medium">Menganalisis percakapan...</p>
           <p className="text-sm text-muted-foreground mt-1">🧠 AI sedang memproses</p>
@@ -56,12 +53,17 @@ const ModeSelection = ({ onAnalyze, contactSelected }: ModeSelectionProps) => {
             whileHover={{ scale: 1.01 }}
             whileTap={{ scale: 0.99 }}
             onClick={() => setSelectedMode(mode.id)}
-            className={`w-full text-left p-4 rounded-xl border transition-all ${
+            className={`w-full text-left p-4 rounded-xl border transition-all relative overflow-hidden ${
               selectedMode === mode.id
                 ? "border-primary bg-primary/5 shadow-md"
                 : "border-border hover:border-primary/30 hover:bg-muted/50"
             }`}
           >
+            {"badge" in mode && mode.badge && (
+              <span className="absolute top-2 right-2 text-[9px] font-bold bg-destructive text-destructive-foreground rounded-full px-2 py-0.5">
+                {mode.badge}
+              </span>
+            )}
             <div className="flex items-start gap-3">
               <span className="text-xl">{mode.icon}</span>
               <div>
@@ -74,11 +76,7 @@ const ModeSelection = ({ onAnalyze, contactSelected }: ModeSelectionProps) => {
       </div>
 
       {selectedMode === "question" && (
-        <motion.div
-          initial={{ opacity: 0, height: 0 }}
-          animate={{ opacity: 1, height: "auto" }}
-          className="mb-4"
-        >
+        <motion.div initial={{ opacity: 0, height: 0 }} animate={{ opacity: 1, height: "auto" }} className="mb-4">
           <textarea
             value={question}
             onChange={(e) => setQuestion(e.target.value)}
@@ -108,14 +106,12 @@ const ModeSelection = ({ onAnalyze, contactSelected }: ModeSelectionProps) => {
             : "bg-muted text-muted-foreground cursor-not-allowed"
         }`}
       >
-        {selectedMode === "question" ? "Analisis" : "Mulai Analisis"}
+        {selectedMode === "quick-reply" ? "Dapatkan Balasan" : selectedMode === "question" ? "Analisis" : "Mulai Analisis"}
         <ArrowRight className="w-4 h-4" />
       </button>
 
       {!contactSelected && (
-        <p className="text-xs text-muted-foreground text-center mt-2">
-          Pilih kontak terlebih dahulu
-        </p>
+        <p className="text-xs text-muted-foreground text-center mt-2">Pilih kontak terlebih dahulu</p>
       )}
     </div>
   );
