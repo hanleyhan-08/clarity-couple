@@ -61,7 +61,7 @@ const AnalysisResult = ({ contact, onBack, mode }: AnalysisResultProps) => {
   const scoreLabel = ca.score <= 40 ? "🟢 Sehat" : ca.score <= 65 ? "🟡 Tegang" : "🔴 Tinggi";
 
   return (
-    <div className="flex-1 overflow-y-auto p-4 md:p-5 space-y-4">
+    <div className="h-full overflow-y-auto p-4 md:p-5 space-y-4">
       <button onClick={onBack} className="text-sm text-muted-foreground hover:text-foreground flex items-center gap-1 transition-colors">
         <ArrowLeft className="w-3.5 h-3.5" /> Kembali ke mode
       </button>
