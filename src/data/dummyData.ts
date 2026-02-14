@@ -18,6 +18,7 @@ export interface ChatMessage {
   fromMe: boolean;
   text: string;
   time: string;
+  date?: string; // YYYY-MM-DD
   read: boolean;
   sender: "user" | "partner";
 }
@@ -109,27 +110,32 @@ export const contacts: Contact[] = [
 
 export const chatMessages: Record<string, ChatMessage[]> = {
   "1": [
-    { id: "1", fromMe: false, sender: "partner", text: "Kamu kok jadi dingin banget sih akhir-akhir ini?", time: "14:10", read: true },
-    { id: "2", fromMe: true, sender: "user", text: "Hah? Dingin gimana?", time: "14:12", read: true },
-    { id: "3", fromMe: false, sender: "partner", text: "Ya gitu, kayak males bales chat aku", time: "14:13", read: true },
-    { id: "4", fromMe: true, sender: "user", text: "Lagi banyak pikiran aja, sayang", time: "14:14", read: true },
-    { id: "5", fromMe: false, sender: "partner", text: "Pikiran apa? Kok gak cerita ke aku?", time: "14:15", read: true },
-    { id: "6", fromMe: true, sender: "user", text: "Kerjaan lagi banyak banget, deadline besok", time: "14:16", read: true },
-    { id: "7", fromMe: false, sender: "partner", text: "Kamu selalu bilang gitu", time: "14:17", read: true },
-    { id: "8", fromMe: true, sender: "user", text: "Emang beneran kok", time: "14:18", read: true },
-    { id: "9", fromMe: false, sender: "partner", text: "Tapi weekend kemarin kita janjian kamu malah bilang capek", time: "14:19", read: true },
-    { id: "10", fromMe: true, sender: "user", text: "Iya emang lagi capek banget", time: "14:20", read: true },
-    { id: "11", fromMe: false, sender: "partner", text: "Capek atau emang udah gak mau effort buat hubungan ini?", time: "14:22", read: true },
-    { id: "12", fromMe: true, sender: "user", text: "Brigida please jangan gini dulu", time: "14:23", read: true },
-    { id: "13", fromMe: false, sender: "partner", text: "Gini gimana? Aku cuma nanya", time: "14:24", read: true },
-    { id: "14", fromMe: true, sender: "user", text: "Aku udah bilang lagi banyak kerjaan", time: "14:25", read: true },
-    { id: "15", fromMe: false, sender: "partner", text: "Terus aku harus gimana? Diem aja?", time: "14:26", read: true },
-    { id: "16", fromMe: true, sender: "user", text: "Bukan gitu maksud aku", time: "14:27", read: true },
-    { id: "17", fromMe: false, sender: "partner", text: "Terus apa? Kasih solusi dong", time: "14:28", read: true },
-    { id: "18", fromMe: true, sender: "user", text: "Weekend depan kita ketemuan ya? Aku janji", time: "14:29", read: true },
-    { id: "19", fromMe: false, sender: "partner", text: "Kamu juga janji minggu lalu", time: "14:30", read: true },
-    { id: "20", fromMe: true, sender: "user", text: "Kali ini beneran, aku cancel semua rencana lain", time: "14:31", read: true },
-    { id: "21", fromMe: false, sender: "partner", text: "Aku ngerti kok maksud kamu...", time: "14:32", read: false },
+    // Last Week
+    { id: "1", fromMe: false, sender: "partner", text: "Kamu kok jadi dingin banget sih akhir-akhir ini?", time: "14:10", date: "2024-02-05", read: true },
+    { id: "2", fromMe: true, sender: "user", text: "Hah? Dingin gimana?", time: "14:12", date: "2024-02-05", read: true },
+    { id: "3", fromMe: false, sender: "partner", text: "Ya gitu, kayak males bales chat aku", time: "14:13", date: "2024-02-05", read: true },
+
+    // Yesterday
+    { id: "4", fromMe: true, sender: "user", text: "Lagi banyak pikiran aja, sayang", time: "09:14", date: "2024-02-13", read: true },
+    { id: "5", fromMe: false, sender: "partner", text: "Pikiran apa? Kok gak cerita ke aku?", time: "09:15", date: "2024-02-13", read: true },
+    { id: "6", fromMe: true, sender: "user", text: "Kerjaan lagi banyak banget, deadline besok", time: "09:16", date: "2024-02-13", read: true },
+    { id: "7", fromMe: false, sender: "partner", text: "Kamu selalu bilang gitu", time: "09:17", date: "2024-02-13", read: true },
+    { id: "8", fromMe: true, sender: "user", text: "Emang beneran kok", time: "09:18", date: "2024-02-13", read: true },
+
+    // Today
+    { id: "9", fromMe: false, sender: "partner", text: "Tapi weekend kemarin kita janjian kamu malah bilang capek", time: "14:19", date: "2024-02-14", read: true },
+    { id: "10", fromMe: true, sender: "user", text: "Iya emang lagi capek banget", time: "14:20", date: "2024-02-14", read: true },
+    { id: "11", fromMe: false, sender: "partner", text: "Capek atau emang udah gak mau effort buat hubungan ini?", time: "14:22", date: "2024-02-14", read: true },
+    { id: "12", fromMe: true, sender: "user", text: "Brigida please jangan gini dulu", time: "14:23", date: "2024-02-14", read: true },
+    { id: "13", fromMe: false, sender: "partner", text: "Gini gimana? Aku cuma nanya", time: "14:24", date: "2024-02-14", read: true },
+    { id: "14", fromMe: true, sender: "user", text: "Aku udah bilang lagi banyak kerjaan", time: "14:25", date: "2024-02-14", read: true },
+    { id: "15", fromMe: false, sender: "partner", text: "Terus aku harus gimana? Diem aja?", time: "14:26", date: "2024-02-14", read: true },
+    { id: "16", fromMe: true, sender: "user", text: "Bukan gitu maksud aku", time: "14:27", date: "2024-02-14", read: true },
+    { id: "17", fromMe: false, sender: "partner", text: "Terus apa? Kasih solusi dong", time: "14:28", date: "2024-02-14", read: true },
+    { id: "18", fromMe: true, sender: "user", text: "Weekend depan kita ketemuan ya? Aku janji", time: "14:29", date: "2024-02-14", read: true },
+    { id: "19", fromMe: false, sender: "partner", text: "Kamu juga janji minggu lalu", time: "14:30", date: "2024-02-14", read: true },
+    { id: "20", fromMe: true, sender: "user", text: "Kali ini beneran, aku cancel semua rencana lain", time: "14:31", date: "2024-02-14", read: true },
+    { id: "21", fromMe: false, sender: "partner", text: "Aku ngerti kok maksud kamu...", time: "14:32", date: "2024-02-14", read: false },
   ],
   "2": [
     { id: "1", fromMe: true, sender: "user", text: "Bud, tadi ulang tahun mama kamu kan?", time: "19:15", read: true },

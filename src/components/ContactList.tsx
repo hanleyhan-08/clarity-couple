@@ -23,11 +23,10 @@ const ContactList = ({ selectedId, onSelect, collapsed = false }: ContactListPro
           <button
             key={c.id}
             onClick={() => onSelect(c)}
-            className={`w-10 h-10 rounded-full shrink-0 overflow-hidden transition-all ${
-              selectedId === c.id
+            className={`w-10 h-10 rounded-full shrink-0 overflow-hidden transition-all ${selectedId === c.id
                 ? "ring-2 ring-primary ring-offset-1"
                 : "hover:ring-2 hover:ring-muted-foreground/30"
-            }`}
+              }`}
           >
             <img
               src={c.avatar}
@@ -46,7 +45,7 @@ const ContactList = ({ selectedId, onSelect, collapsed = false }: ContactListPro
   }
 
   return (
-    <div className="w-full md:w-[340px] bg-card border-r border-border flex flex-col">
+    <div className="w-full md:w-[340px] bg-card border-r border-border flex flex-col h-full">
       {/* WhatsApp-style header - fixed height to align with chat header */}
       <div className="gradient-primary px-4 h-[52px] flex items-center justify-between shrink-0">
         <h2 className="text-base font-semibold text-primary-foreground">Chats</h2>
@@ -79,18 +78,16 @@ const ContactList = ({ selectedId, onSelect, collapsed = false }: ContactListPro
             animate={{ opacity: 1, x: 0 }}
             transition={{ delay: i * 0.04 }}
             onClick={() => onSelect(c)}
-            className={`w-full flex items-center gap-3 px-4 py-3 text-left transition-all border-b border-border/50 ${
-              selectedId === c.id
+            className={`w-full flex items-center gap-3 px-4 py-3 text-left transition-all border-b border-border/50 ${selectedId === c.id
                 ? "bg-primary/5"
                 : "hover:bg-muted/50"
-            }`}
+              }`}
           >
             {/* Avatar */}
-            <div className={`w-12 h-12 rounded-full shrink-0 overflow-hidden ${
-              selectedId === c.id
+            <div className={`w-12 h-12 rounded-full shrink-0 overflow-hidden ${selectedId === c.id
                 ? "ring-2 ring-primary ring-offset-1"
                 : ""
-            }`}>
+              }`}>
               <img src={c.avatar} alt={c.name} className="w-full h-full object-cover" />
             </div>
 

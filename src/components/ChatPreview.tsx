@@ -1,6 +1,8 @@
 import { motion } from "framer-motion";
 import { chatMessages, type Contact } from "@/data/dummyData";
 import { Search, MoreVertical, Smile, Paperclip, Mic } from "lucide-react";
+import { format, isToday, isYesterday } from "date-fns";
+import { id as idLocale } from "date-fns/locale";
 
 interface ChatPreviewProps {
   contact: Contact | null;
@@ -22,6 +24,16 @@ const ChatPreview = ({ contact }: ChatPreviewProps) => {
   }
 
   const messages = chatMessages[contact.id] || [];
+
+  const getDateLabel = (dateStr?: string) => {
+    if (!dateStr) return null;
+    const date = new Date(dateStr);
+    if (isToday(date)) return "Hari Ini";
+    if (isYesterday(date)) return "Kemarin";
+    return format(date, "dd/MM/yyyy", { locale: idLocale });
+  };
+
+  let lastDate = "";
 
   return (
     <div className="flex-1 flex flex-col h-full bg-background">
@@ -47,34 +59,49 @@ const ChatPreview = ({ contact }: ChatPreviewProps) => {
       </div>
 
       {/* Messages with WhatsApp wallpaper - scrollable */}
-      <div className="flex-1 overflow-y-auto wa-chat-bg px-4 py-3 space-y-1.5 min-h-0">
-        {messages.map((msg, i) => (
-          <motion.div
-            key={msg.id}
-            initial={{ opacity: 0, y: 8 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: i * 0.03 }}
-            className={`flex ${msg.fromMe ? "justify-end" : "justify-start"}`}
-          >
-            <div
-              className={`max-w-[75%] rounded-lg px-3 py-1.5 shadow-sm relative ${
-                msg.fromMe
-                  ? "bg-bubble-me rounded-tr-none"
-                  : "bg-bubble-partner rounded-tl-none"
-              }`}
-            >
-              <p className="text-[13px] text-foreground leading-relaxed">{msg.text}</p>
-              <div className="flex items-center justify-end gap-1 mt-0.5">
-                <span className="text-[10px] text-muted-foreground">{msg.time}</span>
-                {msg.fromMe && (
-                  <span className={`text-[10px] ${msg.read ? "text-accent" : "text-muted-foreground"}`}>
-                    {msg.read ? "✓✓" : "✓"}
-                  </span>
+      <div className="flex-1 overflow-y-auto wa-chat-bg px-4 py-3 min-h-0">
+        <div className="space-y-1.5 pb-2">
+          {messages.map((msg, i) => {
+            const currentDate = msg.date;
+            const showDateHeader = currentDate && currentDate !== lastDate;
+            if (currentDate) lastDate = currentDate;
+
+            return (
+              <div key={msg.id}>
+                {showDateHeader && (
+                  <div className="flex justify-center my-4 sticky top-2 z-10">
+                    <span className="bg-[#EFEFEF]/90 dark:bg-zinc-800/90 text-[11px] text-muted-foreground px-3 py-1 rounded-lg shadow-sm backdrop-blur-[2px]">
+                      {getDateLabel(currentDate)}
+                    </span>
+                  </div>
                 )}
+                <motion.div
+                  initial={{ opacity: 0, y: 8 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ delay: i * 0.03 }}
+                  className={`flex ${msg.fromMe ? "justify-end" : "justify-start"}`}
+                >
+                  <div
+                    className={`max-w-[75%] rounded-lg px-3 py-1.5 shadow-sm relative ${msg.fromMe
+                        ? "bg-bubble-me rounded-tr-none"
+                        : "bg-bubble-partner rounded-tl-none"
+                      }`}
+                  >
+                    <p className="text-[13px] text-foreground leading-relaxed">{msg.text}</p>
+                    <div className="flex items-center justify-end gap-1 mt-0.5">
+                      <span className="text-[10px] text-muted-foreground">{msg.time}</span>
+                      {msg.fromMe && (
+                        <span className={`text-[10px] ${msg.read ? "text-accent" : "text-muted-foreground"}`}>
+                          {msg.read ? "✓✓" : "✓"}
+                        </span>
+                      )}
+                    </div>
+                  </div>
+                </motion.div>
               </div>
-            </div>
-          </motion.div>
-        ))}
+            );
+          })}
+        </div>
       </div>
 
       {/* WhatsApp-style input - fixed at bottom */}

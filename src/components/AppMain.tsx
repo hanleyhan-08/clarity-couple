@@ -6,7 +6,7 @@ import ChatPreview from "@/components/ChatPreview";
 import ModeSelection from "@/components/ModeSelection";
 import AnalysisResult from "@/components/AnalysisResult";
 import { type Contact } from "@/data/dummyData";
-import { ArrowLeft, PanelLeftClose, PanelLeftOpen } from "lucide-react";
+import { ArrowLeft } from "lucide-react";
 
 interface AppMainProps {
   onBack: () => void;
@@ -18,8 +18,7 @@ const AppMain = ({ onBack }: AppMainProps) => {
   const [selectedContact, setSelectedContact] = useState<Contact | null>(null);
   const [view, setView] = useState<View>("select");
   const [analysisMode, setAnalysisMode] = useState<string>("conflict");
-  const [showContactList, setShowContactList] = useState(true);
-  const [sidebarExpanded, setSidebarExpanded] = useState(true);
+
 
   const handleAnalyze = useCallback((mode: string) => {
     setAnalysisMode(mode);
@@ -43,79 +42,53 @@ const AppMain = ({ onBack }: AppMainProps) => {
 
       {/* Main content */}
       <div className="flex-1 flex overflow-hidden">
-        <AnimatePresence mode="wait">
-          {view === "select" ? (
-            <motion.div key="select" initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} className="flex-1 flex">
-              <ContactList selectedId={selectedContact?.id ?? null} onSelect={setSelectedContact} />
+        {/* Contact list - always visible */}
+        <div className="overflow-hidden shrink-0 h-full bg-card">
+          <ContactList
+            selectedId={selectedContact?.id ?? null}
+            onSelect={(c) => { setSelectedContact(c); setView("select"); }}
+            collapsed={false}
+          />
+        </div>
+
+        {/* Resizable chat + analysis */}
+        <ResizablePanelGroup direction="horizontal" className="flex-1">
+          <ResizablePanel defaultSize={75} minSize={30}>
+            <div className="h-full flex flex-col overflow-hidden">
               <ChatPreview contact={selectedContact} />
-              <ModeSelection onAnalyze={handleAnalyze} contactSelected={!!selectedContact} />
-            </motion.div>
-          ) : (
-            <motion.div key="result" initial={{ opacity: 0, x: 20 }} animate={{ opacity: 1, x: 0 }} exit={{ opacity: 0 }} className="flex-1 flex">
-              {/* Toggleable contact list */}
-              <AnimatePresence>
-                {showContactList && (
+            </div>
+          </ResizablePanel>
+          <ResizableHandle withHandle />
+          <ResizablePanel defaultSize={25} minSize={25} maxSize={65}>
+            <div className="h-full bg-card overflow-hidden">
+              <AnimatePresence mode="wait">
+                {view === "select" ? (
                   <motion.div
-                    initial={{ width: 0, opacity: 0 }}
-                    animate={{ width: "auto", opacity: 1 }}
-                    exit={{ width: 0, opacity: 0 }}
-                    transition={{ duration: 0.2 }}
-                    className="overflow-hidden shrink-0"
+                    key="select"
+                    initial={{ opacity: 0, x: 20 }}
+                    animate={{ opacity: 1, x: 0 }}
+                    exit={{ opacity: 0, x: -20 }}
+                    className="h-full"
                   >
-                    <ContactList
-                      selectedId={selectedContact?.id ?? null}
-                      onSelect={(c) => { setSelectedContact(c); setView("select"); }}
-                      collapsed={!sidebarExpanded}
-                    />
+                    <ModeSelection onAnalyze={handleAnalyze} contactSelected={!!selectedContact} />
                   </motion.div>
-                )}
-              </AnimatePresence>
-
-              {/* Toggle buttons */}
-              <div className="flex flex-col bg-card border-r border-border shrink-0">
-                <button
-                  onClick={() => setShowContactList(!showContactList)}
-                  className="w-6 flex-1 flex items-center justify-center hover:bg-muted transition-colors"
-                  title={showContactList ? "Sembunyikan kontak" : "Tampilkan kontak"}
-                >
-                  {showContactList ? (
-                    <PanelLeftClose className="w-3.5 h-3.5 text-muted-foreground" />
-                  ) : (
-                    <PanelLeftOpen className="w-3.5 h-3.5 text-muted-foreground" />
-                  )}
-                </button>
-                {showContactList && (
-                  <button
-                    onClick={() => setSidebarExpanded(!sidebarExpanded)}
-                    className="w-6 h-8 flex items-center justify-center hover:bg-muted transition-colors border-t border-border"
-                    title={sidebarExpanded ? "Kecilkan sidebar" : "Perbesar sidebar"}
+                ) : (
+                  <motion.div
+                    key="result"
+                    initial={{ opacity: 0, x: 20 }}
+                    animate={{ opacity: 1, x: 0 }}
+                    exit={{ opacity: 0, x: -20 }}
+                    className="h-full"
                   >
-                    <span className="text-[9px] text-muted-foreground font-medium">
-                      {sidebarExpanded ? "◀" : "▶"}
-                    </span>
-                  </button>
-                )}
-              </div>
-
-              {/* Resizable chat + analysis */}
-              <ResizablePanelGroup direction="horizontal" className="flex-1">
-                <ResizablePanel defaultSize={55} minSize={30}>
-                  <div className="h-full flex flex-col overflow-hidden">
-                    <ChatPreview contact={selectedContact} />
-                  </div>
-                </ResizablePanel>
-                <ResizableHandle withHandle />
-                <ResizablePanel defaultSize={45} minSize={25} maxSize={65}>
-                  <div className="h-full bg-card overflow-hidden">
                     {selectedContact && (
                       <AnalysisResult contact={selectedContact} onBack={handleBackToMode} mode={analysisMode} />
                     )}
-                  </div>
-                </ResizablePanel>
-              </ResizablePanelGroup>
-            </motion.div>
-          )}
-        </AnimatePresence>
+                  </motion.div>
+                )}
+              </AnimatePresence>
+            </div>
+          </ResizablePanel>
+        </ResizablePanelGroup>
       </div>
 
       {/* Footer */}
