@@ -149,11 +149,11 @@ const LandingPage = ({ onStart }: LandingPageProps) => {
       <footer className="py-6 border-t border-border bg-card">
         <div className="container mx-auto px-4 text-center">
           <p className="text-xs text-muted-foreground">
-            Ini adalah mockup visual. Tidak ada data yang tersimpan atau diproses. Untuk versi lengkap, tunggu peluncuran resmi.
+            &copy; 2026 Clarity Couple. All rights reserved.
           </p>
         </div>
-      </footer>
-    </div>
+      </footer >
+    </div >
   );
 };
 
