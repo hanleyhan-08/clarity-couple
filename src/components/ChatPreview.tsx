@@ -25,10 +25,14 @@ const ChatPreview = ({ contact }: ChatPreviewProps) => {
 
   return (
     <div className="flex-1 flex flex-col bg-background">
-      {/* WhatsApp-style chat header */}
-      <div className="gradient-primary px-4 py-2.5 flex items-center gap-3">
-        <div className="w-9 h-9 rounded-full bg-primary-foreground/20 flex items-center justify-center text-xs font-semibold text-primary-foreground">
-          {contact.initials}
+      {/* WhatsApp-style chat header - fixed height to align with contact list header */}
+      <div className="gradient-primary px-4 h-[52px] flex items-center gap-3 shrink-0">
+        <div className="w-9 h-9 rounded-full bg-primary-foreground/20 flex items-center justify-center text-xs font-semibold text-primary-foreground overflow-hidden">
+          {contact.avatar && contact.avatar.startsWith("http") ? (
+            <img src={contact.avatar} alt={contact.name} className="w-full h-full object-cover" />
+          ) : (
+            contact.initials
+          )}
         </div>
         <div className="flex-1">
           <p className="text-sm font-semibold text-primary-foreground">{contact.name}</p>
