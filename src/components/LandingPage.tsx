@@ -142,15 +142,14 @@ const LandingPage = ({ onStart }: LandingPageProps) => {
                     {/* Chat Header */}
                     <div className="px-6 py-5 bg-background/80 backdrop-blur-md border-b border-border/50 flex items-center gap-4 z-10 sticky top-0">
                       <div className="w-12 h-12 rounded-full overflow-hidden border-2 border-primary/20 shadow-sm relative">
-                        {/* AI Avatar */}
-                        <img src={aiAvatar} alt="Clarity AI" className="w-full h-full object-cover" />
+                        {/* Partner Avatar - Brigida */}
+                        <img src={aiAvatar} alt="Brigida Putri" className="w-full h-full object-cover" />
                         <div className="absolute bottom-0 right-0 w-3 h-3 bg-green-500 border-2 border-background rounded-full"></div>
                       </div>
                       <div>
-                        <h3 className="font-bold text-foreground text-lg leading-tight">Clarity AI</h3>
-                        <p className="text-xs text-primary font-medium flex items-center gap-1">
-                          <span className="w-1.5 h-1.5 rounded-full bg-primary animate-pulse" />
-                          Online • Relationship Expert
+                        <h3 className="font-bold text-foreground text-lg leading-tight">Brigida Putri</h3>
+                        <p className="text-xs text-muted-foreground font-medium flex items-center gap-1">
+                          Online
                         </p>
                       </div>
                     </div>
@@ -160,31 +159,30 @@ const LandingPage = ({ onStart }: LandingPageProps) => {
                       {/* Pattern background overlay */}
                       <div className="absolute inset-0 opacity-[0.03] bg-[radial-gradient(#000_1px,transparent_1px)] [background-size:16px_16px]"></div>
 
+                      <div className="flex justify-end">
+                        <div className="bg-primary/10 rounded-2xl rounded-tr-none px-4 py-3 shadow-sm max-w-[85%]">
+                          <p className="text-sm text-foreground leading-relaxed">
+                            Aku gak bermaksud nyuekin kamu, Brig. Aku kerja buat masa depan kita juga.
+                          </p>
+                          <span className="text-[10px] text-primary/60 mt-1 block text-right">19:30 ✓✓</span>
+                        </div>
+                      </div>
+
                       <div className="flex justify-start">
                         <div className="bg-white rounded-2xl rounded-tl-none px-4 py-3 shadow-sm max-w-[85%] border border-border/50">
                           <p className="text-sm text-foreground leading-relaxed">
-                            Halo! Aku Clarity AI. <br />Aku lihat ada ketegangan dari chat yang kamu upload dengan <b>Brigida</b>. Sepertinya dia merasa <b>"diabaikan"</b> meski kamu merasa sudah menjelaskan.
+                            Masa depan apa kalau sekarang kamu gak ada waktu? Kamu cuma mikirin diri sendiri.
                           </p>
-                          <span className="text-[10px] text-muted-foreground mt-1 block">19:30</span>
+                          <span className="text-[10px] text-muted-foreground mt-1 block">19:31</span>
                         </div>
                       </div>
 
                       <div className="flex justify-end">
                         <div className="bg-primary/10 rounded-2xl rounded-tr-none px-4 py-3 shadow-sm max-w-[85%]">
                           <p className="text-sm text-foreground leading-relaxed">
-                            Iya, padahal aku cuma lagi sibuk kerja. Kenapa dia gak ngerti ya?
+                            Kamu selalu ngomong gitu. Aku capek debat hal yang sama terus.
                           </p>
-                          <span className="text-[10px] text-primary/60 mt-1 block text-right">19:31 ✓✓</span>
-                        </div>
-                      </div>
-
-                      <div className="flex justify-start">
-                        <div className="bg-white rounded-2xl rounded-tl-none px-4 py-3 shadow-sm max-w-[85%] border border-border/50">
-                          <p className="text-sm text-foreground leading-relaxed">
-                            Wajar kamu merasa begitu. Tapi coba lihat kalimat ini: <i>"Kamu selalu gini..."</i> <br />
-                            Ini memicu pertahanan dirinya. Mau aku bantu susun balasan yang lebih empatik tapi tegas?
-                          </p>
-                          <span className="text-[10px] text-muted-foreground mt-1 block">19:32</span>
+                          <span className="text-[10px] text-primary/60 mt-1 block text-right">19:32 ✓✓</span>
                         </div>
                       </div>
 
