@@ -1,5 +1,7 @@
 import { motion } from "framer-motion";
 import { MessageCircle, Shield, Zap, Heart, Lock, Brain } from "lucide-react";
+import { useNavigate } from "react-router-dom";
+import { useUUID } from "@/context/UUIDProvider";
 
 interface LandingPageProps {
   onStart: () => void;
@@ -23,6 +25,17 @@ const features = [
 ];
 
 const LandingPage = ({ onStart }: LandingPageProps) => {
+  const navigate = useNavigate();
+  const { userUUID, generateUUID } = useUUID();
+
+  const handleStart = () => {
+    if (!userUUID) {
+      generateUUID();
+    }
+    navigate("/chat");
+    if (onStart) onStart();
+  };
+
   return (
     <div className="min-h-screen flex flex-col">
       {/* Hero */}
@@ -54,7 +67,7 @@ const LandingPage = ({ onStart }: LandingPageProps) => {
 
             <motion.div variants={itemVariants}>
               <button
-                onClick={onStart}
+                onClick={handleStart}
                 className="inline-flex items-center gap-3 bg-primary-foreground/20 backdrop-blur-sm text-primary-foreground px-8 py-4 rounded-2xl text-lg font-semibold shadow-lg hover:shadow-xl transition-all duration-300 hover:scale-105 border border-primary-foreground/20"
               >
                 <MessageCircle className="w-6 h-6" />
@@ -149,7 +162,7 @@ const LandingPage = ({ onStart }: LandingPageProps) => {
       <footer className="py-6 border-t border-border bg-card">
         <div className="container mx-auto px-4 text-center">
           <p className="text-xs text-muted-foreground">
-            Ini adalah mockup visual. Tidak ada data yang tersimpan atau diproses. Untuk versi lengkap, tunggu peluncuran resmi.
+            &copy; 2026 Clarity Couple. All rights reserved.
           </p>
         </div>
       </footer>
