@@ -4,8 +4,7 @@ on:
   push:
     branches:
       - prod
-    paths:
-      - 'clarity-couple/**'
+
 
 jobs:
   deploy:
