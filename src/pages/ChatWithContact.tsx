@@ -1,6 +1,6 @@
-import { motion } from "framer-motion";
+import { motion, AnimatePresence } from "framer-motion";
 import { type Contact, chatMessages } from "@/data/dummyData";
-import { Search, MoreVertical, Smile, Paperclip, Send } from "lucide-react";
+import { Search, MoreVertical, Smile, Paperclip, Send, X } from "lucide-react";
 import { format, isToday, isYesterday } from "date-fns";
 import { id as idLocale } from "date-fns/locale";
 import { useLayoutEffect, useRef, useState, useEffect } from "react";
@@ -24,10 +24,18 @@ interface Message {
 }
 
 const ChatWithContact = ({ contact }: ChatWithContactProps) => {
-    const { userUUID } = useUUID();
+    // 1. Direct Static Initialization
+    // We use a key on the component in AppMain, so this component REMOUNTS on contact change.
+    // This allows us to simply initialize state from the dummy data.
+    const [messages, setMessages] = useState<Message[]>(() => {
+        if (!contact) return [];
+        return chatMessages[contact.id] || [];
+    });
+
     const [inputMessage, setInputMessage] = useState("");
+    const [isSearching, setIsSearching] = useState(false);
+    const [searchQuery, setSearchQuery] = useState("");
     const scrollContainerRef = useRef<HTMLDivElement>(null);
-    const queryClient = useQueryClient();
 
     // Helper for date headers
     const getDateLabel = (dateStr?: string) => {
@@ -38,106 +46,15 @@ const ChatWithContact = ({ contact }: ChatWithContactProps) => {
         return format(date, "dd/MM/yyyy", { locale: idLocale });
     };
 
-    // 1. Fetch History from Backend
-    const { data: backendHistory, isLoading } = useQuery({
-        queryKey: ["chat", contact?.id],
-        queryFn: async () => {
-            if (!contact || !userUUID) return [];
-            // Only fetch from backend for ID > 5 in real app, but here we can try fetching all 
-            // or mix. For now, let's fetch backend if it exists.
-            try {
-                const res = await fetch(`${config.apiBaseUrl}/chat/${userUUID}/${contact.id}/history`);
-                if (!res.ok) return [];
-                const data = await res.json();
-                return data.map((msg: any) => ({
-                    id: msg.id,
-                    text: msg.message,
-                    sender: msg.sender === "user" ? "user" : "partner", // backend 'ai' mapped to partner for UI?
-                    fromMe: msg.sender === "user",
-                    time: format(new Date(msg.created_at), "HH:mm"),
-                    date: format(new Date(msg.created_at), "yyyy-MM-dd"),
-                    read: true
-                }));
-            } catch (e) {
-                console.error("Failed to fetch history", e);
-                return [];
-            }
-        },
-        enabled: !!contact && !!userUUID
-    });
-
-    // 2. Merge Logic
-    const [messages, setMessages] = useState<Message[]>([]);
-
+    // Simple state reset if prop changes (redundant with key, but safe)
     useEffect(() => {
-        if (!contact) return;
-
-        // Load from LocalStorage first
-        const saved = localStorage.getItem(`chat_${contact.id}_${userUUID}`);
-        let initialMessages: Message[] = [];
-
-        if (saved) {
-            try {
-                initialMessages = JSON.parse(saved);
-            } catch (e) {
-                console.error("Failed to parse local history", e);
-            }
+        if (contact) {
+            setMessages(chatMessages[contact.id] || []);
         }
-
-        // If no local, use dummy for contacts 1-5
-        if (initialMessages.length === 0 && contact.id && parseInt(contact.id) <= 5) {
-            initialMessages = chatMessages[contact.id] || [];
-        }
-
-        // If we have backend history, it takes precedence (or merges?)
-        // For simplicity: If backend has data, we trust it as the source of truth for *synced* messages.
-        // We might want to preserve "pending" messages from local if we had complex logic, but for now:
-        // Use Backend if available, else Local/Dummy.
-
-        if (backendHistory && backendHistory.length > 0) {
-            setMessages(backendHistory);
-            // Update local storage with fresh backend data
-            localStorage.setItem(`chat_${contact.id}_${userUUID}`, JSON.stringify(backendHistory));
-        } else {
-            // If backend is empty (new session) but we have local/dummy, show that.
-            if (messages.length === 0) {
-                setMessages(initialMessages);
-            }
-        }
-    }, [contact, backendHistory, userUUID]); // Removed messages dependency to avoid loops
-
-    // Save to local storage whenever messages change
-    useEffect(() => {
-        if (contact && userUUID && messages.length > 0) {
-            localStorage.setItem(`chat_${contact.id}_${userUUID}`, JSON.stringify(messages));
-        }
-    }, [messages, contact, userUUID]);
+    }, [contact?.id]);
 
 
-    // 3. Send Message Mutation
-    const sendMessageMutation = useMutation({
-        mutationFn: async (text: string) => {
-            if (!userUUID || !contact) throw new Error("No user or contact");
-
-            const res = await fetch(`${config.apiBaseUrl}/chat`, {
-                method: "POST",
-                headers: { "Content-Type": "application/json" },
-                body: JSON.stringify({
-                    user_uuid: userUUID,
-                    contact_id: contact.id,
-                    message: text
-                })
-            });
-
-            if (!res.ok) throw new Error("Failed to send");
-            return res.json();
-        },
-        onSuccess: (data) => {
-            // Invalidate history to refetch
-            queryClient.invalidateQueries({ queryKey: ["chat", contact?.id] });
-        }
-    });
-
+    // 3. Send Message (Mock - Local Only)
     const handleSend = () => {
         if (!inputMessage.trim() || !contact) return;
 
@@ -153,15 +70,19 @@ const ChatWithContact = ({ contact }: ChatWithContactProps) => {
 
         // Optimistic update
         setMessages(prev => [...prev, tempMsg]);
-        sendMessageMutation.mutate(inputMessage);
         setInputMessage("");
+
+        // Simulate partner reply (optional demo feature)
+        setTimeout(() => {
+            // scrollToBottom() handled by layout effect
+        }, 100);
     };
 
     useLayoutEffect(() => {
         if (scrollContainerRef.current) {
             scrollContainerRef.current.scrollTop = scrollContainerRef.current.scrollHeight;
         }
-    }, [messages, contact]);
+    }, [messages, contact, isSearching]); // Added isSearching to scroll on search open/close
 
     if (!contact) {
         return (
@@ -177,38 +98,90 @@ const ChatWithContact = ({ contact }: ChatWithContactProps) => {
         );
     }
 
+    // Filter messages based on search query
+    const filteredMessages = messages.filter(msg =>
+        msg.text.toLowerCase().includes(searchQuery.toLowerCase())
+    );
+
     return (
         <div className="flex-1 flex flex-col h-full bg-background">
             {/* Header */}
-            <div className="gradient-primary px-4 h-[52px] flex items-center gap-3 shrink-0">
-                <div className="w-9 h-9 rounded-full bg-primary-foreground/20 flex items-center justify-center text-xs font-semibold text-primary-foreground overflow-hidden">
-                    {contact.avatar ? (
-                        <img src={contact.avatar} alt={contact.name} className="w-full h-full object-cover" />
+            <div className="gradient-primary px-4 h-[52px] flex items-center gap-3 shrink-0 relative overflow-hidden">
+                <AnimatePresence mode="wait">
+                    {isSearching ? (
+                        <motion.div
+                            key="search-bar"
+                            initial={{ y: -50, opacity: 0 }}
+                            animate={{ y: 0, opacity: 1 }}
+                            exit={{ y: -50, opacity: 0 }}
+                            className="absolute inset-0 bg-background flex items-center px-2 z-20 border-b border-border"
+                        >
+                            <div className="flex-1 relative">
+                                <Search className="w-4 h-4 absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground" />
+                                <Input
+                                    autoFocus
+                                    className="pl-9 h-9 bg-muted border-none ring-0 focus-visible:ring-0"
+                                    placeholder="Cari pesan..."
+                                    value={searchQuery}
+                                    onChange={(e) => setSearchQuery(e.target.value)}
+                                />
+                            </div>
+                            <button onClick={() => { setIsSearching(false); setSearchQuery(""); }} className="ml-2 p-2 hover:bg-muted rounded-full">
+                                <X className="w-5 h-5 text-muted-foreground" />
+                            </button>
+                        </motion.div>
                     ) : (
-                        contact.initials
+                        <motion.div
+                            key="header-info"
+                            initial={{ opacity: 0 }}
+                            animate={{ opacity: 1 }}
+                            exit={{ opacity: 0 }}
+                            className="flex items-center gap-3 flex-1"
+                        >
+                            <div className="w-9 h-9 rounded-full bg-primary-foreground/20 flex items-center justify-center text-xs font-semibold text-primary-foreground overflow-hidden">
+                                {contact.avatar ? (
+                                    <img src={contact.avatar} alt={contact.name} className="w-full h-full object-cover" />
+                                ) : (
+                                    contact.initials
+                                )}
+                            </div>
+                            <div className="flex-1">
+                                <p className="text-sm font-semibold text-primary-foreground">{contact.name}</p>
+                                <p className="text-[11px] text-primary-foreground/70">
+                                    {contact.isOnline ? "online" : `last seen ${contact.lastSeen}`}
+                                </p>
+                            </div>
+                            <div className="flex items-center gap-4 text-primary-foreground/80">
+                                <Search className="w-5 h-5 cursor-pointer hover:text-white transition-colors" onClick={() => setIsSearching(true)} />
+                                <MoreVertical className="w-5 h-5 cursor-pointer hover:text-white transition-colors" />
+                            </div>
+                        </motion.div>
                     )}
-                </div>
-                <div className="flex-1">
-                    <p className="text-sm font-semibold text-primary-foreground">{contact.name}</p>
-                    <p className="text-[11px] text-primary-foreground/70">
-                        {contact.isOnline ? "online" : `last seen ${contact.lastSeen}`}
-                    </p>
-                </div>
-                <div className="flex items-center gap-4 text-primary-foreground/80">
-                    <Search className="w-5 h-5 cursor-pointer" />
-                    <MoreVertical className="w-5 h-5 cursor-pointer" />
-                </div>
+                </AnimatePresence>
             </div>
 
             {/* Messages */}
             <div ref={scrollContainerRef} className="flex-1 overflow-y-auto wa-chat-bg px-4 py-3 min-h-0">
                 <div className="space-y-1.5 pb-2">
-                    {messages.map((msg, i) => {
+                    {(isSearching ? filteredMessages : messages).map((msg, i, arr) => {
                         // Basic date header logic
                         let showDateHeader = false;
-                        if (i === 0 || msg.date !== messages[i - 1].date) {
+                        const prevMsg = arr[i - 1];
+                        if (i === 0 || msg.date !== prevMsg?.date) {
                             showDateHeader = true;
                         }
+
+                        // Highlight search term
+                        const renderText = () => {
+                            if (!searchQuery || !msg.text.toLowerCase().includes(searchQuery.toLowerCase())) return msg.text;
+
+                            const parts = msg.text.split(new RegExp(`(${searchQuery})`, 'gi'));
+                            return parts.map((part, idx) =>
+                                part.toLowerCase() === searchQuery.toLowerCase()
+                                    ? <span key={idx} className="bg-yellow-200 text-black px-0.5 rounded">{part}</span>
+                                    : part
+                            );
+                        };
 
                         return (
                             <div key={msg.id || i}>
@@ -225,7 +198,7 @@ const ChatWithContact = ({ contact }: ChatWithContactProps) => {
                                     className={`flex ${msg.fromMe ? "justify-end" : "justify-start"}`}
                                 >
                                     <div className={`max-w-[75%] rounded-lg px-3 py-1.5 shadow-sm relative ${msg.fromMe ? "bg-bubble-me rounded-tr-none" : "bg-bubble-partner rounded-tl-none"}`}>
-                                        <p className="text-[13px] text-foreground leading-relaxed">{msg.text}</p>
+                                        <p className="text-[13px] text-foreground leading-relaxed">{renderText()}</p>
                                         <div className="flex items-center justify-end gap-1 mt-0.5">
                                             <span className="text-[10px] text-muted-foreground">{msg.time}</span>
                                             {msg.fromMe && (
@@ -239,11 +212,9 @@ const ChatWithContact = ({ contact }: ChatWithContactProps) => {
                             </div>
                         );
                     })}
-                    {sendMessageMutation.isPending && (
-                        <div className="flex justify-start">
-                            <div className="bg-bubble-partner rounded-lg px-3 py-1.5 shadow-sm">
-                                <p className="text-[13px] italic text-muted-foreground">Mengetik...</p>
-                            </div>
+                    {filteredMessages.length === 0 && isSearching && (
+                        <div className="text-center py-10 text-muted-foreground text-sm">
+                            Tidak ada pesan yang cocok dengan "{searchQuery}"
                         </div>
                     )}
                 </div>

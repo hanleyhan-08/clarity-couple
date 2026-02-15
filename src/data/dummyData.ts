@@ -236,15 +236,6 @@ export const chatMessages: Record<string, ChatMessage[]> = {
     { id: "1-103", fromMe: false, sender: "partner", text: "Sama-sama. Kamu yang bikin hari ini special", time: "20:05", date: "2025-02-08", read: true },
 
     // Minggu, 9 Feb
-    { id: "1-107", fromMe: true, sender: "user", text: "Minggu depan kali?", time: "10:20", date: "2025-02-09", read: true },
-    { id: "1-108", fromMe: false, sender: "partner", text: "Deal! Jangan lupa ya", time: "10:25", date: "2025-02-09", read: true },
-    { id: "1-109", fromMe: true, sender: "user", text: "Brig, besok kayaknya minggu yang lumayan sibuk", time: "14:00", date: "2025-02-09", read: true },
-    { id: "1-110", fromMe: false, sender: "partner", text: "Sibuk gimana?", time: "14:05", date: "2025-02-09", read: true },
-    { id: "1-111", fromMe: true, sender: "user", text: "Ada project baru masuk, kemungkinan lembur beberapa hari", time: "14:10", date: "2025-02-09", read: true },
-    { id: "1-112", fromMe: false, sender: "partner", text: "Oh... berapa lama kira-kira?", time: "14:15", date: "2025-02-09", read: true },
-    { id: "1-113", fromMe: true, sender: "user", text: "Mungkin sampai Jumat", time: "14:20", date: "2025-02-09", read: true },
-    { id: "1-114", fromMe: false, sender: "partner", text: "Jadi weekend ini exception dong?", time: "14:25", date: "2025-02-09", read: true },
-    { id: "1-115", fromMe: true, sender: "user", text: "Bukan exception, tetap usaha kok", time: "14:30", date: "2025-02-09", read: true },
     { id: "1-104", fromMe: true, sender: "user", text: "Minggu depan kali?", time: "10:20", date: "2025-02-09", read: true },
     { id: "1-105", fromMe: false, sender: "partner", text: "Deal! Jangan lupa ya", time: "10:25", date: "2025-02-09", read: true },
     { id: "1-106", fromMe: true, sender: "user", text: "Brig, besok kayaknya minggu yang lumayan sibuk", time: "14:00", date: "2025-02-09", read: true },

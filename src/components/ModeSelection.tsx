@@ -23,17 +23,20 @@ const ModeSelection = ({ onAnalyze, contactSelected, contact }: ModeSelectionPro
   const handleAnalyze = async () => {
     if (!selectedMode || !contact || !userUUID) return;
 
+    // For "question" mode (Chat), we don't need to call API here.
+    // The ChatMode component will handle the initial fetching.
+    if (selectedMode === "question") {
+      onAnalyze(selectedMode, null);
+      return;
+    }
+
     setLoading(true);
     try {
-      let endpoint = `${config.apiBaseUrl} /analysis/${selectedMode} `;
+      let endpoint = `${config.apiBaseUrl}/analysis/${selectedMode}`;
       let body: any = {
         user_uuid: userUUID,
         contact_id: contact.id
       };
-
-      if (selectedMode === "question") {
-        body.question = question;
-      }
 
       const res = await fetch(endpoint, {
         method: "POST",
@@ -108,22 +111,14 @@ const ModeSelection = ({ onAnalyze, contactSelected, contact }: ModeSelectionPro
 
       {selectedMode === "question" && (
         <motion.div initial={{ opacity: 0, height: 0 }} animate={{ opacity: 1, height: "auto" }} className="mb-4">
-          <textarea
-            value={question}
-            onChange={(e) => setQuestion(e.target.value)}
-            placeholder="Tanyakan sesuatu tentang percakapan ini..."
-            className="w-full bg-muted rounded-xl p-3 text-sm text-foreground placeholder:text-muted-foreground resize-none h-24 focus:outline-none focus:ring-2 focus:ring-primary/30 border border-border"
-          />
-          <div className="flex flex-wrap gap-1.5 mt-2">
-            {sampleQuestions.map((q) => (
-              <button
-                key={q}
-                onClick={() => setQuestion(q)}
-                className="text-xs bg-muted hover:bg-primary/10 text-muted-foreground hover:text-primary rounded-full px-3 py-1 transition-colors border border-border"
-              >
-                {q}
-              </button>
-            ))}
+          {/* Input removed, as we want to start a chat session instead */}
+          <div className="bg-primary/5 border border-primary/20 rounded-xl p-4 text-sm text-foreground">
+            <p>Mode ini akan membuka sesi chat khusus dimana AI akan:</p>
+            <ul className="list-disc list-inside mt-2 space-y-1 text-muted-foreground">
+              <li>Menganalisis konflik secara mendalam</li>
+              <li>Menyiapkan 10 pertanyaan relevan untukmu</li>
+              <li>Menjawab pertanyaanmu seputar hubungan ini</li>
+            </ul>
           </div>
         </motion.div>
       )}
@@ -136,7 +131,7 @@ const ModeSelection = ({ onAnalyze, contactSelected, contact }: ModeSelectionPro
           : "bg-muted text-muted-foreground cursor-not-allowed"
           }`}
       >
-        {selectedMode === "quick-reply" ? "Dapatkan Balasan" : selectedMode === "question" ? "Analisis" : "Mulai Analisis"}
+        {selectedMode === "quick-reply" ? "Dapatkan Balasan" : selectedMode === "question" ? "Mulai Chat" : "Mulai Analisis"}
         <ArrowRight className="w-4 h-4" />
       </button>
 

@@ -79,7 +79,10 @@ const AppMain = ({ onBack }: AppMainProps) => {
         <ResizablePanelGroup direction="horizontal" className="flex-1">
           <ResizablePanel defaultSize={75} minSize={30}>
             <div className="h-full flex flex-col overflow-hidden">
-              <ChatWithContact contact={selectedContact} />
+              <ChatWithContact
+                key={selectedContact?.id || "empty"}
+                contact={selectedContact}
+              />
             </div>
           </ResizablePanel>
           <ResizableHandle withHandle />
