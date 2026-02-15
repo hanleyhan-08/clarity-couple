@@ -1,4 +1,4 @@
-# Clarity Couple
+# Clarity Couple.
 
 **AI Chat Analysis Tool for Couples**
 
