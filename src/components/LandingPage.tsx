@@ -2,6 +2,7 @@ import { motion, Variants } from "framer-motion";
 import { MessageCircle, Shield, Zap, Heart, Lock, Brain, ArrowRight, Star, Sparkles, CheckCircle2 } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import { useUUID } from "@/context/UUIDProvider";
+import aiAvatar from "@/assets/my****.png";
 
 interface LandingPageProps {
   onStart: () => void;
@@ -100,7 +101,7 @@ const LandingPage = ({ onStart }: LandingPageProps) => {
               <motion.p variants={itemVariants} className="text-lg md:text-xl text-muted-foreground mb-10 max-w-2xl mx-auto lg:mx-0 leading-relaxed">
                 Bingung kenapa dia marah? Merasa tidak didengar?
                 <br />
-                Biarkan <b>Brigida Putri</b> (AI Mediator) menganalisis chat kalian untuk menemukan akar masalah dan solusi konkret.
+                Biarkan <b>Clarity AI</b> (Mediator Hubungan) menganalisis chat kalian untuk menemukan akar masalah dan solusi konkret.
               </motion.p>
 
               <motion.div variants={itemVariants} className="flex flex-col sm:flex-row items-center gap-4 justify-center lg:justify-start">
@@ -141,17 +142,15 @@ const LandingPage = ({ onStart }: LandingPageProps) => {
                     {/* Chat Header */}
                     <div className="px-6 py-5 bg-background/80 backdrop-blur-md border-b border-border/50 flex items-center gap-4 z-10 sticky top-0">
                       <div className="w-12 h-12 rounded-full overflow-hidden border-2 border-primary/20 shadow-sm relative">
-                        {/* Placeholder Avatar for Brigida */}
-                        <div className="w-full h-full bg-gradient-to-br from-orange-100 to-orange-200 flex items-center justify-center">
-                          <span className="text-orange-600 font-bold text-lg">BP</span>
-                        </div>
+                        {/* AI Avatar */}
+                        <img src={aiAvatar} alt="Clarity AI" className="w-full h-full object-cover" />
                         <div className="absolute bottom-0 right-0 w-3 h-3 bg-green-500 border-2 border-background rounded-full"></div>
                       </div>
                       <div>
-                        <h3 className="font-bold text-foreground text-lg leading-tight">Brigida Putri</h3>
+                        <h3 className="font-bold text-foreground text-lg leading-tight">Clarity AI</h3>
                         <p className="text-xs text-primary font-medium flex items-center gap-1">
                           <span className="w-1.5 h-1.5 rounded-full bg-primary animate-pulse" />
-                          Online • AI Relationship Expert
+                          Online • Relationship Expert
                         </p>
                       </div>
                     </div>
@@ -164,7 +163,7 @@ const LandingPage = ({ onStart }: LandingPageProps) => {
                       <div className="flex justify-start">
                         <div className="bg-white rounded-2xl rounded-tl-none px-4 py-3 shadow-sm max-w-[85%] border border-border/50">
                           <p className="text-sm text-foreground leading-relaxed">
-                            Halo! Aku Brigida. <br />Aku lihat ada ketegangan dari chat yang kamu upload. Sepertinya pasanganmu merasa <b>"diabaikan"</b> meski kamu merasa sudah menjelaskan.
+                            Halo! Aku Clarity AI. <br />Aku lihat ada ketegangan dari chat yang kamu upload dengan <b>Brigida</b>. Sepertinya dia merasa <b>"diabaikan"</b> meski kamu merasa sudah menjelaskan.
                           </p>
                           <span className="text-[10px] text-muted-foreground mt-1 block">19:30</span>
                         </div>
