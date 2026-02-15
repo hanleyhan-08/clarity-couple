@@ -31,10 +31,10 @@ const itemVariants: Variants = {
 };
 
 const features = [
-  { icon: MessageCircle, title: "Analisis Chat Mendalam", desc: "Upload percakapan WhatsApp untuk dianalisis AI secara detail." },
-  { icon: Shield, title: "100% Private & Aman", desc: "Data tidak disimpan di server, hanya diproses di sesi browser kamu." },
-  { icon: Brain, title: "Wawasan Psikologis", desc: "Dapatkan insight pola komunikasi dan emosi tersembunyi." },
-  { icon: Heart, title: "Mediator Netral", desc: "AI yang tidak memihak, membantu melihat perspektif kedua sisi." },
+  { icon: MessageCircle, title: "Analisis Chat Mendalam", desc: "Upload percakapan WhatsApp untuk dianalisis AI secara detail" },
+  { icon: Shield, title: "100% Private & Aman", desc: "Data tidak disimpan di server, hanya diproses di sesi browser kamu" },
+  { icon: Brain, title: "Wawasan Psikologis", desc: "Dapatkan insight pola komunikasi dan emosi tersembunyi" },
+  { icon: Heart, title: "Mediator Netral", desc: "AI yang tidak memihak, membantu melihat perspektif kedua sisi" },
 ];
 
 const LandingPage = ({ onStart }: LandingPageProps) => {
