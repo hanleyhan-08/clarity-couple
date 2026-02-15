@@ -5,6 +5,7 @@ import { useState, useRef, useEffect } from "react";
 import ReactMarkdown from "react-markdown";
 import { config } from "@/config";
 import { useUUID } from "@/context/UUIDProvider";
+import { apiFetch } from "@/lib/api";
 
 interface AnalysisResultProps {
   contact: Contact;
@@ -104,9 +105,8 @@ const ChatMode = ({ contact }: { contact: any }) => {
   const generateInitialQuestions = async () => {
     setInitialLoading(true);
     try {
-      const res = await fetch(`${config.apiBaseUrl}/analysis/key-questions`, {
+      const res = await apiFetch(`/analysis/key-questions`, {
         method: "POST",
-        headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ user_uuid: userUUID, contact_id: contact.id })
       });
 
@@ -172,9 +172,8 @@ const ChatMode = ({ contact }: { contact: any }) => {
       }
 
       if (!answer) {
-        const res = await fetch(`${config.apiBaseUrl}/analysis/question`, {
+        const res = await apiFetch(`/analysis/question`, {
           method: "POST",
-          headers: { "Content-Type": "application/json" },
           body: JSON.stringify({
             user_uuid: userUUID,
             contact_id: contact.id,

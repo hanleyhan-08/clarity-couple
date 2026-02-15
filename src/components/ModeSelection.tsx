@@ -6,6 +6,7 @@ import { ArrowRight, Loader2 } from "lucide-react";
 import { useUUID } from "@/context/UUIDProvider";
 import { type Contact } from "@/data/dummyData";
 import { config } from "@/config";
+import { apiFetch } from "@/lib/api";
 
 interface ModeSelectionProps {
   onAnalyze: (mode: string, data: any) => void;
@@ -38,9 +39,8 @@ const ModeSelection = ({ onAnalyze, contactSelected, contact }: ModeSelectionPro
         contact_id: contact.id
       };
 
-      const res = await fetch(endpoint, {
+      const res = await apiFetch(`/analysis/${selectedMode}`, {
         method: "POST",
-        headers: { "Content-Type": "application/json" },
         body: JSON.stringify(body)
       });
 
