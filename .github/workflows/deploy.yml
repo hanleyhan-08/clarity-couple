@@ -40,7 +40,7 @@ jobs:
           username: ${{ secrets.VPS_USERNAME }}
           key: ${{ secrets.VPS_SSH_KEY }}
           port: ${{ secrets.VPS_PORT }}
-          source: "dist/*,nginx/cc.rima-app.com.conf"
+          source: "dist/*,nginx/clarity.rima-app.com.conf"
           target: "/tmp/clarity-deploy" 
           strip_components: 0 # We want to keep structure or handle it in script
 
@@ -58,12 +58,12 @@ jobs:
             sudo cp -r /tmp/clarity-deploy/dist/* /var/www/html/clarity-couple/
             
             # Move Nginx config
-            sudo cp /tmp/clarity-deploy/nginx/cc.rima-app.com.conf /etc/nginx/sites-available/cc.rima-app.com.conf
-            sudo ln -sf /etc/nginx/sites-available/cc.rima-app.com.conf /etc/nginx/sites-enabled/
+            sudo cp /tmp/clarity-deploy/nginx/clarity.rima-app.com.conf /etc/nginx/sites-available/clarity.rima-app.com.conf
+            sudo ln -sf /etc/nginx/sites-available/clarity.rima-app.com.conf /etc/nginx/sites-enabled/
             
             # Check for SSL and obtain if missing
-            if ! sudo certbot certificates | grep -q "cc.rima-app.com"; then
-                sudo certbot --nginx -d cc.rima-app.com --non-interactive --agree-tos -m admin@rima-app.com --redirect
+            if ! sudo certbot certificates | grep -q "clarity.rima-app.com"; then
+                sudo certbot --nginx -d clarity.rima-app.com --non-interactive --agree-tos -m admin@rima-app.com --redirect
             fi
             
             # Reload Nginx
